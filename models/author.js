@@ -42,4 +42,4 @@ AuthorSchema.virtual('date_of_death_yyyy_mm_dd').get(function() {
 });
 
 // Export model.
-module.exports = mongoose.model('Author', AuthorSchema);
+// module.exports = mongoose.model('Author', AuthorSchema);
