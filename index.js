@@ -22,6 +22,9 @@ app.use(
   })
 );
 
+app.get('/api/books', (req, res, next) => {
+  return res.json(['one', 'two', 'three']);
+});
 function runServer(port = PORT) {
   const server = app
     .listen(port, () => {
