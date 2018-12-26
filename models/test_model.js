@@ -1,22 +1,25 @@
 'use strict';
 var mongoose = require('mongoose');
-// 
-var Schema = mongoose.Schema;
 
-var testbookSchema = mongoose.Schema({
-  title:{type: String},
-  author: {type: String},
-  genre: {type:String}
+var bookSchema = mongoose.Schema({
+  title: { type: String, required: true },
+  author: { type: String, required: true },
+  genre: { type: String },
+  summary: String,
+  status:{type:String, required: true, enum:['Available', 'Maintenance', 'On-loan','Reserved', 'Missing']},
+  isbn:{type:String}
 });
 
-testbookSchema.methods.serialize = function() {
+bookSchema.methods.serialize = function() {
   return {
     id: this._id,
     title: this.title,
     author: this.author,
-    genre: this.genre
+    genre: this.genre,
+    status:this.status
   };
 };
 // Export model.
+const Book = mongoose.model('Book', bookSchema);
 
-module.exports = mongoose.model('Books', testbookSchema);
+module.exports = { Book };
