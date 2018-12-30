@@ -20,16 +20,23 @@ app.use(
   })
 );
 
+// const testOutput = {
+//   title: 'test title',
+//   author: 'test author'
+// };
+// app.get('/books/testOutput', (req, res) => {
+//   res.json(testOutput);
+// });
+
 app.get('/books', (req, res) => {
   Book.find()
-    .then(books => res.json(books.map(book =>book.serialize())))
+    .then(books => res.json(books.map(book => book.serialize())))
     .catch(err => {
       console.error(err);
       res.status(500).json({ message: 'something went wrong' });
     });
-  // console.log('Books', Books);
-  // return res.json(['one', 'two', 'three']);
 });
+
 function runServer(port = PORT) {
   const server = app
     .listen(port, () => {
@@ -46,4 +53,4 @@ if (require.main === module) {
   runServer();
 }
 
-module.exports = { app }; 
+module.exports = { app };

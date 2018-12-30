@@ -16,7 +16,8 @@ bookSchema.methods.serialize = function() {
     title: this.title,
     author: this.author,
     genre: this.genre,
-    status:this.status
+    status:this.status, 
+    summary: this.summary
   };
 };
 // Export model.
