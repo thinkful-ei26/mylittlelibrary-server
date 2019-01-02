@@ -1,6 +1,7 @@
 'use strict';
 const express = require('express');
 const cors = require('cors');
+const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 mongoose.Promise = global.Promise;
 const morgan = require('morgan');
@@ -19,22 +20,83 @@ app.use(
     origin: CLIENT_ORIGIN
   })
 );
+app.use(bodyParser.json());
 
-// const testOutput = {
-//   title: 'test title',
-//   author: 'test author'
-// };
-// app.get('/books/testOutput', (req, res) => {
-//   res.json(testOutput);
-// });
-
-app.get('/books', (req, res) => {
+app.get('/books', (req, res, next) => {
   Book.find()
+    // .limit(3)
     .then(books => res.json(books.map(book => book.serialize())))
     .catch(err => {
       console.error(err);
       res.status(500).json({ message: 'something went wrong' });
     });
+});
+
+app.get('/books/:id', (req, res, next) => {
+  const id = req.params.id;
+  Book.findById(id)
+    .then(item => {
+      if (item) {
+        res.json(item.serialize());
+      } else {
+        next;
+      }
+    })
+    .catch(next);
+});
+
+app.post('/books/', (req, res, next) => {
+  console.log(req.body);
+  const { title, author, genre, status } = req.body;
+  if (!title) {
+    const err = new Error('Missing required fields');
+    err.status = 400;
+    return next(err);
+  }
+  Book.create({ title, author, genre, status })
+    .then(item => {
+      return res
+        .status(201)
+        .location(`/books/${item.id}`)
+        .json(item.serialize());
+    })
+    .catch(next);
+});
+
+app.put('/books/:id', (req, res, next) => {
+  const { id } = req.params;
+  const { title, author, genre, status } = req.body;
+  const updateItem = {};
+  const updateableFields = ['title', 'author', 'genre', 'status'];
+
+  updateableFields.forEach(field => {
+    if (field in req.body) {
+      updateItem[field] = req.body[field];
+    }
+  });
+  if (!title) {
+    const err = new Error('Missing required fields');
+    err.status = 400;
+    return next(err);
+  }
+  Book.findByIdAndUpdate(id, updateItem, { new: true })
+    .then(item => {
+      if (item) {
+        res.json(item.serialize());
+      }
+    })
+    .catch(next);
+});
+
+app.delete('/books/:id', (req, res, next) => {
+  const { id } = req.params;
+  Book.findByIdAndRemove(id)
+    .then(item =>{
+      if(item){
+        res.status(204).end();
+      }
+    })
+    .catch(next);
 });
 
 function runServer(port = PORT) {
