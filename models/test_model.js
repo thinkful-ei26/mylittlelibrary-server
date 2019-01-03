@@ -6,8 +6,12 @@ var bookSchema = mongoose.Schema({
   author: { type: String, required: true },
   genre: { type: String },
   summary: String,
-  status:{type:String, required: true, enum:['Available', 'Maintenance', 'On-loan','Reserved', 'Missing']},
-  isbn:{type:String}
+  status: {
+    type: String,
+    required: true,
+    enum: ['Available', 'Maintenance', 'On-loan', 'Reserved', 'Missing']
+  },
+  isbn: { type: String }
 });
 
 bookSchema.methods.serialize = function() {
@@ -16,10 +20,13 @@ bookSchema.methods.serialize = function() {
     title: this.title,
     author: this.author,
     genre: this.genre,
-    status:this.status, 
+    status: this.status,
     summary: this.summary
   };
 };
+
+// schema.index({name: 'text', 'profile.something': 'text'});
+bookSchema.index({ title: 'text' });
 // Export model.
 const Book = mongoose.model('Book', bookSchema);
 

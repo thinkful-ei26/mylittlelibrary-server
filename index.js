@@ -9,6 +9,7 @@ const { PORT, CLIENT_ORIGIN } = require('./config');
 const { Book } = require('./models/test_model');
 const { dbConnect } = require('./db-mongoose');
 const app = express();
+
 app.use(
   morgan(process.env.NODE_ENV === 'production' ? 'common' : 'dev', {
     skip: (req, res) => process.env.NODE_ENV === 'test'
@@ -22,15 +23,57 @@ app.use(
 );
 app.use(bodyParser.json());
 
-app.get('/books', (req, res, next) => {
-  Book.find()
-    // .limit(3)
+// app.get('/books', (req, res, next) => {
+//   Book.find()
+//     // .limit(3)
+//     .then(books => res.json(books.map(book => book.serialize())))
+//     .catch(err => {
+//       console.error(err);
+//       res.status(500).json({ message: 'something went wrong' });
+//     });
+// });
+
+//********************************************* */
+// create a new object, if title
+app.get('/books/', (req, res, next) => {
+  //   if(title in req.params){
+  // Book.find({title:title})
+  //   }
+  let query = {};
+  const { title, author, genre, status } = req.query;
+  if (title) {
+    // query = { title: title };
+    query.title=title;
+  }
+  console.log(title);
+  Book.find(
+    query
+    // $or: [
+    //   { title: title },
+    //   { status: status },
+    //   { genre: genre },
+    //   { author: author}
+    // ]
+  )
     .then(books => res.json(books.map(book => book.serialize())))
     .catch(err => {
       console.error(err);
       res.status(500).json({ message: 'something went wrong' });
     });
 });
+// **********************************************/
+
+//********************************************* */
+// app.get('/books/student/:s', (req, res, next) => {
+//   // const title = req.params.title;
+//   Book.find({ $or: [{'title':/[a-z]/ig},{'status': /[a-z]/ig},{'genre':/[a-z]/ig},{'author':/[a-z]/ig}]})
+//     .then(books => res.json(books.map(book => book.serialize())))
+//     .catch(err => {
+//       console.error(err);
+//       res.status(500).json({ message: 'something went wrong' });
+//     });
+// });
+// **********************************************/
 
 app.get('/books/:id', (req, res, next) => {
   const id = req.params.id;
@@ -91,8 +134,8 @@ app.put('/books/:id', (req, res, next) => {
 app.delete('/books/:id', (req, res, next) => {
   const { id } = req.params;
   Book.findByIdAndRemove(id)
-    .then(item =>{
-      if(item){
+    .then(item => {
+      if (item) {
         res.status(204).end();
       }
     })
