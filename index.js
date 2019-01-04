@@ -23,57 +23,25 @@ app.use(
 );
 app.use(bodyParser.json());
 
-// app.get('/books', (req, res, next) => {
-//   Book.find()
-//     // .limit(3)
-//     .then(books => res.json(books.map(book => book.serialize())))
-//     .catch(err => {
-//       console.error(err);
-//       res.status(500).json({ message: 'something went wrong' });
-//     });
-// });
-
-//********************************************* */
-// create a new object, if title
 app.get('/books/', (req, res, next) => {
-  //   if(title in req.params){
-  // Book.find({title:title})
-  //   }
   let query = {};
   const { title, author, genre, status } = req.query;
   if (title) {
-    // query = { title: title };
-    query.title=title;
+    query.title = title;
+  } else if(author){
+    query.author = author;
+  }else if(genre){
+    query.genre= genre;
+  }else if(status){
+    query.status=status;
   }
-  console.log(title);
-  Book.find(
-    query
-    // $or: [
-    //   { title: title },
-    //   { status: status },
-    //   { genre: genre },
-    //   { author: author}
-    // ]
-  )
+  Book.find(query)
     .then(books => res.json(books.map(book => book.serialize())))
     .catch(err => {
       console.error(err);
       res.status(500).json({ message: 'something went wrong' });
     });
 });
-// **********************************************/
-
-//********************************************* */
-// app.get('/books/student/:s', (req, res, next) => {
-//   // const title = req.params.title;
-//   Book.find({ $or: [{'title':/[a-z]/ig},{'status': /[a-z]/ig},{'genre':/[a-z]/ig},{'author':/[a-z]/ig}]})
-//     .then(books => res.json(books.map(book => book.serialize())))
-//     .catch(err => {
-//       console.error(err);
-//       res.status(500).json({ message: 'something went wrong' });
-//     });
-// });
-// **********************************************/
 
 app.get('/books/:id', (req, res, next) => {
   const id = req.params.id;
