@@ -22,9 +22,11 @@ app.use(
   })
 );
 app.use(bodyParser.json());
+// Why isn't the logic below returning either author OR title OR genre OR status? Seems to not work.
 
-app.get('/books/', (req, res, next) => {
+app.get('/books/', (req, res) => {
   let query = {};
+  // const {genericQuery} =req.query;
   const { title, author, genre, status } = req.query;
   if (title) {
     query.title = title;
