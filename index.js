@@ -43,13 +43,14 @@ passport.use(localStrategy);
 passport.use(jwtStrategy);
 
 app.use(bodyParser.json());
-app.use('/api/users/', usersRouter);
-app.use('/api/auth/', authRouter);
+
 
 const jwtAuth = passport.authenticate('jwt', { session: false });
 /****************AUTHENTICATION ROUTES***************** */
+app.use('/books/users/', usersRouter);
+app.use('/books/auth/', authRouter);
 // A protected endpoint which needs a valid JWT to access it
-app.get('/api/protected', jwtAuth, (req, res) => {
+app.get('/books/protected', jwtAuth, (req, res) => {
   return res.json({
     data: 'rosebud'
   });
