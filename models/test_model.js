@@ -8,7 +8,7 @@ var bookSchema = mongoose.Schema({
   summary: String,
   status: {
     type: String,
-    required: true,
+    required:false,
     enum: ['Available', 'Maintenance', 'On-loan', 'Reserved', 'Missing']
   },
   isbn: { type: String }

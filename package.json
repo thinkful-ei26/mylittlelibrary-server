@@ -15,11 +15,17 @@
   "author": "Joaquin Fox <joaquin.fox@gmail.com>",
   "license": "MIT",
   "dependencies": {
+    "bcryptjs": "^2.4.0",
+    "body-parser": "^1.15.2",
+    "dotenv": "^4.0.0",
     "cors": "^2.8.4",
     "express": "^4.16.3",
-    "knex": "^0.15.2",
+    "jsonwebtoken": "^8.2.0",
     "mongoose": "^5.2.6",
     "morgan": "^1.9.0",
+    "passport": "^0.3.2",
+    "passport-jwt": "^2.2.1",
+    "passport-local": "^1.0.0",
     "pg": "^7.4.3"
   },
   "devDependencies": {

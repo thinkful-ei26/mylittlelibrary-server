@@ -22,7 +22,6 @@ app.use(
   })
 );
 app.use(bodyParser.json());
-// Why isn't the logic below returning either author OR title OR genre OR status? Seems to not work.
 
 app.get('/books/', (req, res) => {
   let query = {};
@@ -59,7 +58,7 @@ app.get('/books/:id', (req, res, next) => {
 });
 
 app.post('/books/', (req, res, next) => {
-  console.log(req.body);
+  // console.log(req.body);
   const { title, author, genre, status } = req.body;
   if (!title) {
     const err = new Error('Missing required fields');
