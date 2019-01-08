@@ -47,8 +47,8 @@ app.use(bodyParser.json());
 
 const jwtAuth = passport.authenticate('jwt', { session: false });
 /****************AUTHENTICATION ROUTES***************** */
-app.use('/books/users/', usersRouter);
-app.use('/books/auth/', authRouter);
+app.use('/users', usersRouter);
+app.use('/auth', authRouter);
 // A protected endpoint which needs a valid JWT to access it
 app.get('/books/protected', jwtAuth, (req, res) => {
   return res.json({
@@ -56,9 +56,6 @@ app.get('/books/protected', jwtAuth, (req, res) => {
   });
 });
 
-app.use('*', (req, res) => {
-  return res.status(404).json({ message: 'Not Found' });
-});
 
 
 
@@ -158,6 +155,11 @@ app.delete('/books/:id', (req, res, next) => {
     })
     .catch(next);
 });
+
+app.use('*', (req, res) => {
+  return res.status(404).json({ message: 'Not Found' });
+});
+
 
 function runServer(port = PORT) {
   const server = app
