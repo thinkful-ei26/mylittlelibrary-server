@@ -55,19 +55,7 @@ app.get('/books/protected', jwtAuth, (req, res) => {
     data: 'rosebud'
   });
 });
-
-
-
-
-
-
-
-
-
-
-
-
-/***************AUTHENTICATION ROUTES END**************** */
+/********************************************************** */
 app.get('/books/', (req, res) => {
   let query = {};
   // const {genericQuery} =req.query;
